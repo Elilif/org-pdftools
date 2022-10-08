@@ -37,6 +37,7 @@
 (require 'pdf-view)
 (require 'pdf-annot)
 (require 'pdf-occur)
+(require 'ox)
 
 (defgroup org-pdftools nil
   "Tools for adding pdftools link support in Org mode."
@@ -207,11 +208,11 @@ Can be one of highlight/underline/strikeout/squiggly."
                     (with-selected-window
                         (org-noter--get-doc-window)
                       (isearch-mode t)
-                      (let (pdf-isearch-narrow-to-page t)
+                      (let ((pdf-isearch-narrow-to-page t))
                         (isearch-yank-string search-string))
                         ))
                  (isearch-mode t)
-                 (let (pdf-isearch-narrow-to-page t)
+                 (let ((pdf-isearch-narrow-to-page t))
                    (isearch-yank-string search-string))))))
           ((string-match
             "\\(.*\\)@@\\(.*\\)"
@@ -387,8 +388,7 @@ Can be one of highlight/underline/strikeout/squiggly."
 ;;;###autoload
 (defun org-pdftools-setup-link (&optional prefix)
   "Set up pdf: links in org-mode."
-  (setq org-pdftools-prefix (or prefix org-pdftools-link-prefix))
-  (org-link-set-parameters org-pdftools-prefix
+  (org-link-set-parameters (or prefix org-pdftools-link-prefix)
                            :follow #'org-pdftools-open
                            :complete #'org-pdftools-complete-link
                            :store #'org-pdftools-store-link
